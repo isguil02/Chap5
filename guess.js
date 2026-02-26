@@ -17,6 +17,7 @@ const getRandomInt = (max = 1000) => {
 
 // event handler functions
 const guessClick = () => {
+    const guess = parseInt(document.querySelector("#number").value);
     let message = "";
     const distance = Math.abs(guess - randomNum);
     if (isNaN(guess)) {
@@ -110,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector("#message").textContent = "New game started! Guess a number between 1 and 100.";
             } else {
                 guessClick();
+                console.log("hi");
             }
         }
     });

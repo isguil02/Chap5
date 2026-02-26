@@ -20,22 +20,22 @@ const guessClick = () => {
     const guess = parseInt(document.querySelector("#number").value);
     let message = "";
     const distance = Math.abs(guess - randomNum);
+    color = "black"; // default color for messages
     if (isNaN(guess)) {
         message = "Not a valid number. Please enter a valid number.";
     } else if (guess < 1 || guess > 100) {
         message = "Invalid number. Enter a number between 1 and 100.";        
-    } else {
-        if (guess === lastWord) {
-            if (guess === randomNum) {
-            message = "You won! Start a new game to play again.";
-            } else {
-            message = "You already guessed that number! Try a different one.";
-            }
-        } else { tries++;
+    } else if (lastWord == "w") {
+                message = "You already won! Click \"Play Again\" or enter to start a new game."
+            } else if (guess === lastWord) {
+                message = "You already guessed that number! Try a different one.";
+            } else { 
+                tries++;
         switch (true) {
             case distance === 0:
                 lastWord = (tries === 1) ? "try" : "tries";
-                message = `Fire! You guessed it in ${tries} ${lastWord}!`;
+                message = `Fire! You guessed it in ${tries} ${lastWord}! Click "Play Again" or enter to start a new game.`;
+                document.querySelector("#history").innerHTML += `You Guessed ${randomNum} (The correct answer) in ${tries} ${lastWord}!`; // add to history when guess is correct;
                 color = "green";
                 updateBestScore();
                 break;
@@ -63,22 +63,23 @@ const guessClick = () => {
                 message = "Freezing! (Way off)";
                 color = "darkblue";
         }
-        updateHistory(message,guess);
-    }
-        document.querySelector("#message").style.color = color;
-        
+        if (distance !=0) {document.querySelector("#history").innerHTML += `Guess ${tries}: ${guess} - ${message} <br>`;}
     }
     document.querySelector("#message").textContent = message;
-    color = "black"; // reset color for next guess
     lastWord = guess; // store so can check if made same guess twice
+    document.querySelector("#number").value = ""; // clear input field
+    document.querySelector("#message").style.color = color;
 };
 
 
 const playAgainClick = () => {
     randomNum = getRandomInt(100);
+    console.log(randomNum);
     tries = 0;
     document.querySelector("#number").value = "";
-    document.querySelector("#message").textContent = "";
+    document.querySelector("#message").textContent = "New game started! Guess a number between 1 and 100.";
+    document.querySelector("#history").textContent = "";
+    lastWord = "try";
 };
 const updateBestScore = () => {
     if (best == 0 || tries < best) {
@@ -87,17 +88,16 @@ const updateBestScore = () => {
         }
 };
 
-const updateHistory = (message,guess) => {
+/**const updateHistory = (message,guess) => {
     if (randomNum != guess) {
         document.querySelector("#history").innerHTML += `Guess ${tries}: ${guess} - ${message} <br>`;
     } else {
         document.querySelector("#history").textContent = ""; 
     }
-};
+};**/
 
 document.addEventListener("DOMContentLoaded", () => {
     playAgainClick(); // initial a new game
-
     document.querySelector("#guess").addEventListener(
         "click", guessClick);
     document.querySelector("#play_again").addEventListener(
@@ -105,13 +105,15 @@ document.addEventListener("DOMContentLoaded", () => {
     
     document.querySelector("#number").addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
-            console.log(guess);
-            if (randomNum == guess) {
-            playAgainClick();
-            document.querySelector("#message").textContent = "New game started! Guess a number between 1 and 100.";
+            const guess = parseInt(document.querySelector("#number").value);
+            if (lastWord === "w") {
+                playAgainClick();
+                lastWord = "try";
+            } else if (randomNum === guess) {
+            guessClick();
+            lastWord = "w";
             } else {
                 guessClick();
-                console.log("hi");
             }
         }
     });

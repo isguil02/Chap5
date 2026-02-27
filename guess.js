@@ -1,5 +1,29 @@
 "use strict";
-
+/**
+ * ============================================================================
+ * PROGRAM: Number Guessing Game
+ * 
+ * SUMMARY:
+ * An number guessing game where the user attempts to guess a 
+ * randomly generated number between 1 and 100 the game provides feedback 
+ * based on how close the guess is to the target number (Hot/Cold/Freezing).
+ * The application tracks the number of tries, prevents duplicate guesses,
+ * and maintains a best score record.
+ * 
+ * AUTHOR: Isaiah Guilliatt
+ * DATE: 2/26/2026
+ * GITHUB REPOSITORY:https://github.com/isguil02/Chap5
+ * 
+ * FEATURES:
+ * - Random number generation between 1 and 100
+ * - feedback system (Hot/Warm/Cold/Freezing)
+ * - Duplicate guess prevention
+ * - Try counter and best score tracking
+ * - Guess history display
+ * - Enter key support for quick submissions
+ * - Input validation for numbers 1-100
+ * ============================================================================
+ */
 // global variables 
 let randomNum = 0;
 let tries = 0;
